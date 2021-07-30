@@ -1,0 +1,27 @@
+pipeline{
+    agent{
+        label 'ec2-general-worker-node'
+    }
+    tools{
+        terraform "terraform2"
+    }
+    stages{
+        stage('Git Clone'){
+            steps{
+                   git branch: 'main', url: 'https://github.com/naman3305/Milestone2.git'
+            }
+        }
+    }
+      stage("Terraform Start"){
+             steps{
+              sh 'terraform init'
+              sh 'terraform plan'
+             }
+         }
+         stage('Terraform Deploy')
+         {
+             steps{
+                 sh 'terraform apply --auto-approve'
+             }
+         }
+}
