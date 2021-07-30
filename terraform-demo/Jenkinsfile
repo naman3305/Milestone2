@@ -14,14 +14,13 @@ pipeline{
     }
       stage("Terraform Start"){
              steps{
-              sh 'terraform init'
-              sh 'terraform plan'
-             }
-         }
-         stage('Terraform Deploy')
-         {
-             steps{
-                 sh 'terraform apply --auto-approve'
+                withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: "DevXInternalDeployment"]])
+                 {
+                 sh '''
+                 terraform init
+                 terraform plan 
+                 terraform apply --auto-approve
+                 '''
              }
          }
 }
